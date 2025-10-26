@@ -88,7 +88,7 @@ The aim is to use **AI, data, and empathy** to create a national GBV support eco
 ## 👥 Team BlackLogic
 - **Mthokozisi Mathebula (Lead Developer & Concept Designer)**
 - **ParamedAI (AI Therapist System)**
-- **AsaLogicCare Core Team (Support & Branding)**
+- **Asanda Mahlaba (UX/UI Designer)**
 
 ---
 
