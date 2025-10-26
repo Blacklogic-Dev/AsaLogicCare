@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AsaLogicCare | Report Abuse</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, rgba(255,0,0,0.4), rgba(0,0,255,0.4)), #1f1f1f;
+      color: white;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+
+    .form-container {
+      background: rgba(255,255,255,0.1);
+      padding: 20px 15px 40px;
+      border-radius: 20px;
+      width: 95%;
+      max-width: 450px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(255,255,255,0.05);
+      margin-bottom: 80px; /* space for bottom nav */
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #f5f5f5;
+    }
+
+    .form-container input, 
+    .form-container select, 
+    .form-container textarea {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 15px;
+      font-weight: 500;
+      outline: none;
+      background-color: white;
+      color: black;
+    }
+
+    .form-container button {
+      width: 100%;
+      background-color: #ff2e2e;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 15px;
+    }
+
+    .form-container button:hover {
+      background-color: #ff5c5c;
+    }
+
+    .status {
+      text-align: center;
+      font-size: 16px;
+      margin-top: 10px;
+      min-height: 24px;
+      color: #bdf1ff;
+    }
+
+    .logo {
+      width: 120px;
+      height: auto;
+      display: block;
+      margin: 0 auto 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255,46,46,0.4);
+      animation: glowPulse 3s infinite;
+    }
+
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 10px rgba(255,46,46,0.3); }
+      50% { box-shadow: 0 0 25px rgba(255,46,46,0.8); }
+      100% { box-shadow: 0 0 10px rgba(255,46,46,0.3); }
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(40,40,40,0.95);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 100;
+    }
+
+    .bottom-nav a {
+      color: white;
+      text-align: center;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .bottom-nav a i {
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Logo -->
+  <img src="logo.jpg" alt="AsaLogicCare Logo" class="logo">
+
+  <!-- Form -->
+  <div class="form-container">
+    <h2>Report Abuse</h2>
+    <form id="reportForm">
+      <select id="abuseType" required>
+        <option value="" disabled selected>Type of Abuse</option>
+        <option value="Physical">Physical</option>
+        <option value="Emotional">Emotional</option>
+        <option value="Sexual">Sexual</option>
+        <option value="Psychological">Psychological</option>
+      </select>
+
+      <select id="victimGender" required>
+        <option value="" disabled selected>Gender of Victim</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <select id="practitionerGender" required>
+        <option value="" disabled selected>Gender of Practitioner</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <input type="text" id="abusePlace" placeholder="Place of Abuse" required />
+      <textarea id="message" rows="4" placeholder="Describe the details..." required></textarea>
+
+      <button type="submit"><i class="fa-solid fa-paper-plane"></i> Submit Report</button>
+      <div class="status" id="status"></div>
+    </form>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="dashboard.html"><i class="fa-solid fa-brain"></i> Care+</a>
+    <a href="Analyze.html"><i class="fa-solid fa-chart-bar"></i> Analyze</a>
+    <a href="report.html"><i class="fa-solid fa-bullhorn"></i> Report</a>
+    <a href="emergency.html"><i class="fa-solid fa-triangle-exclamation"></i> Emergency</a>
+    <a href="paramed.html"><i class="fa-solid fa-robot"></i> Paramed AI</a>
+  </div>
+
+  <script>
+    const form = document.getElementById('reportForm');
+    const statusDiv = document.getElementById('status');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const abuseType = document.getElementById('abuseType').value;
+      const victimGender = document.getElementById('victimGender').value;
+      const practitionerGender = document.getElementById('practitionerGender').value;
+      const abusePlace = document.getElementById('abusePlace').value;
+      const message = document.getElementById('message').value;
+
+      const whatsappMessage = `
+Type of Abuse: ${abuseType}
+Victim Gender: ${victimGender}
+Practitioner Gender: ${practitionerGender}
+Place of Abuse: ${abusePlace}
+Details: ${message}
+      `;
+
+      const phoneNumber = "0606614909";
+      const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
+      // Sending feedback
+      statusDiv.textContent = "Sending ✅";
+
+      setTimeout(() => {
+        window.open(whatsappURL, "_blank");
+        statusDiv.textContent = "Sent ✅✅";
+
+        setTimeout(() => {
+          statusDiv.textContent = "";
+          form.reset();
+        }, 3000);
+
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

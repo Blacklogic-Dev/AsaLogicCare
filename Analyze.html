@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AsaLogicCare | Analyze</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, rgba(255,0,0,0.4), rgba(0,0,255,0.4)), #1f1f1f;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 70px;
+  }
+  header {
+    width: 100%;
+    padding: 15px 0;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    background: rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  .form-container, .output-container {
+    width: 90%;
+    max-width: 500px;
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 20px;
+  }
+
+  .form-container label { display: block; margin: 10px 0 5px; font-weight: bold; }
+  .form-container small { display: block; margin-bottom: 5px; font-size: 12px; color: #ddd; }
+  .form-container input, .form-container select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  button {
+    background-color: #ff2e2e;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+  }
+  button:hover { background-color: #ff5c5c; }
+
+  /* Bar Chart */
+  .bar-chart {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 200px;
+    margin-top: 20px;
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .bar {
+    width: 25%;
+    text-align: center;
+    position: relative;
+  }
+  .bar div {
+    width: 100%;
+    background-color: #4cff4c;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    color: #000;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+  .bar span {
+    margin-top: 5px;
+    display: block;
+  }
+
+  .ai-summary {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* Bottom Navigation */
+  .bottom-nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background: rgba(0,0,0,0.3);
+    padding: 12px 0;
+    position: fixed;
+    bottom: 0;
+    backdrop-filter: blur(10px);
+  }
+  .bottom-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .bottom-nav a span { font-size: 12px; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<header>📊 Analyze Your Wellbeing</header>
+
+<div class="form-container">
+  <label for="sleep">Sleep Hours</label>
+  <small>How long do you sleep each night?</small>
+  <input type="number" id="sleep" min="0" max="24">
+
+  <label for="mood">Mood Level (1–10)</label>
+  <small>1 😢 very sad → 10 🥳 extremely happy</small>
+  <select id="mood">
+    <option value="1">1 😢 Very sad</option>
+    <option value="2">2 😟 Sad</option>
+    <option value="3">3 😐 Neutral</option>
+    <option value="4">4 🙂 Slightly happy</option>
+    <option value="5">5 😄 Happy</option>
+    <option value="6">6 😃 Very happy</option>
+    <option value="7">7 😁 Cheerful</option>
+    <option value="8">8 😎 Good mood</option>
+    <option value="9">9 🤩 Excited</option>
+    <option value="10">10 🥳 Extremely happy</option>
+  </select>
+
+  <label for="anxiety">Anxiety Level</label>
+  <small>How anxious do you feel today? (1 calm – 10 extremely anxious)</small>
+  <input type="number" id="anxiety" min="1" max="10">
+
+  <label for="appetite">Appetite Status</label>
+  <small>How hungry or need to eat?</small>
+  <select id="appetite">
+    <option value="normal">Normal</option>
+    <option value="poor">Poor</option>
+    <option value="none">No Appetite</option>
+  </select>
+
+  <label for="pain">Any Bruises, Scars or Pain?</label>
+  <small>Select location if yes</small>
+  <select id="pain">
+    <option value="no">No</option>
+    <option value="head">Head</option>
+    <option value="arm">Arm</option>
+    <option value="leg">Leg</option>
+    <option value="stomach">Stomach</option>
+    <option value="other">Other</option>
+  </select>
+
+  <label for="support">Access to Support</label>
+  <small>Anyone to help you immediately?</small>
+  <select id="support">
+    <option value="yes">Yes</option>
+    <option value="no">No</option>
+  </select>
+
+  <button onclick="analyzeHealth()">Analyze</button>
+</div>
+
+<div class="output-container" id="output">
+  <h3>Your Health Report</h3>
+  <div class="bar-chart">
+    <div class="bar"><div id="mentalBar" style="height:0%">0%</div><span>Mental</span></div>
+    <div class="bar"><div id="physicalBar" style="height:0%">0%</div><span>Physical</span></div>
+    <div class="bar"><div id="emotionalBar" style="height:0%">0%</div><span>Emotional</span></div>
+  </div>
+  <div class="ai-summary" id="aiSummary"></div>
+</div>
+
+<div class="bottom-nav">
+  <a href="care.html"><i class="fa-solid fa-brain"></i><span>Care+</span></a>
+  <a href="Analyze.html"><i class="fa-solid fa-chart-simple"></i><span>Analyze</span></a>
+  <a href="report.html"><i class="fa-solid fa-bullhorn"></i><span>Report</span></a>
+  <a href="emergency.html"><i class="fa-solid fa-triangle-exclamation"></i><span>Emergency</span></a>
+  <a href="paramed.html"><i class="fa-solid fa-robot"></i><span>Paramed AI</span></a>
+</div>
+
+<script>
+function analyzeHealth(){
+  const sleep = Number(document.getElementById('sleep').value);
+  const mood = Number(document.getElementById('mood').value);
+  const anxiety = Number(document.getElementById('anxiety').value);
+  const appetite = document.getElementById('appetite').value;
+  const pain = document.getElementById('pain').value;
+  const support = document.getElementById('support').value;
+
+  // Calculate simple health %
+  const mental = Math.min(100, ((mood + (10 - anxiety)) / 20) * 100);
+  const physical = Math.min(100, (((sleep / 8) + (appetite==='normal'?1:appetite==='poor'?0.5:0) + (pain==='no'?1:0))/3)*100);
+  const emotional = Math.min(100, ((support==='yes'?1:0)*50 + (mood/10)*50));
+
+  // Update bars
+  document.getElementById('mentalBar').style.height = mental + '%';
+  document.getElementById('mentalBar').textContent = Math.round(mental) + '%';
+  document.getElementById('physicalBar').style.height = physical + '%';
+  document.getElementById('physicalBar').textContent = Math.round(physical) + '%';
+  document.getElementById('emotionalBar').style.height = emotional + '%';
+  document.getElementById('emotionalBar').textContent = Math.round(emotional) + '%';
+
+  // Show output
+  document.getElementById('output').style.display = 'block';
+
+  // AI summary
+  let summary='';
+  if(sleep<6) summary+='Sleep is low, improve sleep hygiene.<br>';
+  if(mood<5) summary+='Mood is low, watch therapy videos in Care+.<br>';
+  if(anxiety>7) summary+='High anxiety, consider counseling or support.<br>';
+  if(pain!=='no') summary+=`You report pain in ${pain}, seek medical attention.<br>`;
+  if(support==='no') summary+='No support access, reach out or visit emergency contacts.<br>';
+  if(summary==='') summary='Your health indicators are in good range. Keep it up!';
+  document.getElementById('aiSummary').innerHTML = summary;
+}
+</script>
+
+</body>
+</html>

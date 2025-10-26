@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AsaLogicCare | Healing Hub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* Your existing CSS styles */
+    body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 80px;
+  }
+
+  h1 {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 2em;
+    color: #fff;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+  }
+
+  .search-container {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 90%;
+    max-width: 700px;
+  }
+
+  .search-container input, .search-container select {
+    padding: 10px 15px;
+    border-radius: 15px;
+    border: none;
+    flex: 1 1 200px;
+    font-size: 1em;
+  }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+    width: 90%;
+    max-width: 1200px;
+  }
+
+  .video-card {
+    background: rgba(0,0,0,0.3);
+    padding: 10px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .video-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #fff;
+  }
+
+  .video-card iframe {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+  }
+
+  .video-title {
+    font-weight: bold;
+    font-size: 1em;
+  }
+
+  .video-category {
+    font-size: 0.85em;
+    opacity: 0.8;
+  }
+
+  .popup {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 46, 46, 0.9);
+    padding: 15px 25px;
+    border-radius: 15px;
+    display: none;
+    font-size: 1em;
+    z-index: 1000;
+    animation: popupIn 0.5s forwards;
+  }
+
+  @keyframes popupIn {
+    from { opacity: 0; transform: translate(-50%, 50px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
+
+  .bottom-nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background: rgba(0,0,0,0.3);
+    padding: 12px 0;
+    position: fixed;
+    bottom: 0;
+    backdrop-filter: blur(10px);
+  }
+
+  .bottom-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bottom-nav a span {
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  </style>
+</head>
+<body>
+
+  <h1>AsaLogicCare | Healing Hub</h1>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search videos...">
+    <select id="filterSelect">
+      <option value="all">All Categories</option>
+      <option value="Educational">Educational</option>
+      <option value="Therapy">Therapy</option>
+      <option value="Testimonial">Testimonial</option>
+      <option value="Music">Music</option>
+    </select>
+  </div>
+
+  <div class="video-grid" id="videoGrid"></div>
+
+  <div class="popup" id="popup">AsaLogicCare hopes you feel better today 🌸 Remember, you’re not alone.</div>
+
+  <div class="bottom-nav">
+    <a href="care.html"><i class="fa-solid fa-brain"></i><span>Care+</span></a>
+    <a href="Analyze.html"><i class="fa-solid fa-chart-simple"></i><span>Analyze</span></a>
+    <a href="report.html"><i class="fa-solid fa-bullhorn"></i><span>Report</span></a>
+    <a href="emergency.html"><i class="fa-solid fa-triangle-exclamation"></i><span>Emergency</span></a>
+    <a href="paramed.html"><i class="fa-solid fa-robot"></i><span>Paramed AI</span></a>
+  </div>
+
+  <script>
+    // Video Data
+    const videos = [
+      // Educational Videos
+      {title:"Gender-based Violence Awareness", category:"Educational", url:"https://www.youtube.com/embed/JZqAuRa7o7w"},
+      {title:"Understanding Post-Traumatic Stress Disorder", category:"Educational", url:"https://www.youtube.com/embed/o4A4ZGvmfgs"},
+      {title:"Trauma and the Brain", category:"Educational", url:"https://www.youtube.com/embed/4-tcKYx24aA"},
+      {title:"What is PTSD?", category:"Educational", url:"https://www.youtube.com/embed/2KXtlIX_yUs"},
+      {title:"Childhood Trauma and the Brain", category:"Educational", url:"https://www.youtube.com/embed/xYBUY1kZpf8"},
+      {title:"Trauma Informed Practice", category:"Educational", url:"https://www.youtube.com/embed/mI5-P3P7IXo"},
+
+      {title:"Trauma and the Nervous System", category:"Educational", url:"https://www.youtube.com/embed/ZdIQRxwT1I0"},
+      {title:"Supporting Survivors of GBV", category:"Educational", url:"https://www.youtube.com/embed/WRA_K5K7iWE"},
+      {title:"Gender Equality Animation", category:"Educational", url:"https://www.youtube.com/embed/ilFvvFR_wAU"},
+      // Therapy Videos
+      {title:"Guided Meditation for Trauma Healing", category:"Therapy", url:"https://www.youtube.com/embed/s8spKKxs0J8"},
+      {title:"Healing Trauma Sleep Meditation", category:"Therapy", url:"https://www.youtube.com/embed/wE0Of6W_6RA"},
+      {title:"10 Minute Guided Meditation for Trauma Healing", category:"Therapy", url:"https://www.youtube.com/embed/xLR7wRhzRbA"},
+      {title:"Guided Walkthrough - The Container Method", category:"Therapy", url:"https://www.youtube.com/embed/NrnwYIF1uwE"},
+      {title:"Somatic Meditation to Release Trauma", category:"Therapy", url:"https://www.youtube.com/embed/yCMCKEeG29w"},
+      // Testimonial Videos
+      {title:"Survivor Story: Gugu Khumalo", category:"Testimonial", url:"https://www.youtube.com/embed/WRRulAdG-RM"},
+      {title:"LGBVF Survivors Share Their Stories", category:"Testimonial", url:"https://www.youtube.com/embed/H6HxNuGQomc"},
+      {title:"Stories Untold: Gugu GBV Survivor", category:"Testimonial", url:"https://www.youtube.com/embed/WRRulAdG-RM"},
+      {title:"Laura's Story - Domestic Abuse Survivor", category:"Testimonial", url:"https://www.youtube.com/embed/4ebVAyXBzgc"},
+      {title:"Valiant Voices: Testimonies of GBV", category:"Testimonial", url:"https://www.youtube.com/embed/j7hS7MZwUB4"},
+      // Music Videos
+      {title:"Calm Focus Music for Studying", category:"Music", url:"https://www.youtube.com/embed/OdV6SkGZb3g"},
+      {title:"Deep Focus Music for Work and Studying", category:"Music", url:"https://www.youtube.com/embed/oPVte6aMprI"},
+      {title:"Beautiful Relaxing Music for Stress Relief", category:"Music", url:"https://www.youtube.com/embed/lFcSrYw-ARY"},
+      {title:"Focus Music for Work and Studying", category:"Music", url:"https://www.youtube.com/embed/_4kHxtiuML0"},
+      {title:"Deep Focus 24/7 - Ambient Music", category:"Music", url:"https://www.youtube.com/embed/_bLX5WfDQfM"},
+    ];
+
+    const videoGrid = document.getElementById('videoGrid');
+    const searchInput = document.getElementById('searchInput');
+    const filterSelect = document.getElementById('filterSelect');
+
+    // Render videos
+    function renderVideos() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const filter = filterSelect.value;
+
+      videoGrid.innerHTML = '';
+      videos.forEach(video => {
+        if ((filter === 'all' || video.category === filter) &&
+            (video.title.toLowerCase().includes(searchTerm))) {
+          const card = document.createElement('div');
+          card.className = 'video-card';
+          card.innerHTML = `
+            <iframe src="${video.url}" frameborder="0" allowfullscreen></iframe>
+            <div class="video-title">${video.title}</div>
+            <div class="video-category">${video.category}</div>
+          `;
+          videoGrid.appendChild(card);
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', renderVideos);
+    filterSelect.addEventListener('change', renderVideos);
+
+    // Initial render
+    renderVideos();
+
+    // Popup notification
+    const popup = document.getElementById('popup');
+    function showPopup() {
+      popup.style.display = 'block';
+      setTimeout(() => { popup.style.display = 'none'; }, 5000);
+    }
+    setTimeout(showPopup, 2000); // show after 2 seconds
+  </script>
+
+</body>
+</html>

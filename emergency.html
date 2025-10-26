@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AsaLogicCare | Emergency</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, rgba(255,0,0,0.4), rgba(0,0,255,0.4)), #1f1f1f;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-bottom: 70px; /* for bottom nav */
+  }
+
+  header {
+    width: 100%;
+    padding: 15px 0;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    background: rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  header i { margin-right: 10px; color: #ff2e2e; }
+
+  .emergency-container {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .emergency-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .card-container {
+    perspective: 1000px;
+    width: 250px;
+  }
+
+  .card {
+    width: 100%;
+    height: 300px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s;
+    cursor: pointer;
+  }
+
+  .card:hover { transform: rotateY(180deg); }
+
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+  .card-front {
+    background-size: cover;
+    background-position: center;
+    font-weight: bold;
+    color: #fff;
+    font-size: 18px;
+    text-shadow: 1px 1px 5px #000;
+  }
+
+  .overlay {
+    position: absolute;
+    bottom: 10px;
+    background: rgba(0,0,0,0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .card-back {
+    background: #fff;
+    color: #000;
+    transform: rotateY(180deg);
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .card-back p { margin: 5px 0; word-break: break-word; }
+  .copy-btn {
+    margin-left: 5px;
+    padding: 3px 6px;
+    border: none;
+    border-radius: 5px;
+    background: #ff2e2e;
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .message-box {
+    width: 90%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  /* Bottom Navigation */
+  .bottom-nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background: rgba(0,0,0,0.3);
+    padding: 12px 0;
+    position: fixed;
+    bottom: 0;
+    backdrop-filter: blur(10px);
+  }
+
+  .bottom-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bottom-nav a span { font-size: 12px; margin-top: 2px; }
+
+  @media(max-width:600px){
+    .card-container { width: 200px; }
+    .card { height: 250px; }
+    .card-front { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header><i class="fa-solid fa-triangle-exclamation"></i>Emergency Contacts</header>
+
+<div class="emergency-container">
+  <div class="emergency-grid">
+
+    <!-- Police -->
+    <div class="card-container">
+      <div class="card">
+        <div class="card-front" style="background-image:url('Police.jpg');">
+          <div class="overlay"><i class="fas fa-shield-alt"></i> Police</div>
+        </div>
+        <div class="card-back">
+          <p><strong>Police</strong></p>
+          <p>Phone: 10111 <button class="copy-btn" onclick="copyText('10111')">Copy</button></p>
+          <p>Email: police@emergency.gov.za <button class="copy-btn" onclick="copyText('police@emergency.gov.za')">Copy</button></p>
+          <textarea class="message-box" id="msg1">I need help immediately. Please respond.</textarea>
+          <button class="copy-btn" onclick="copyText(document.getElementById('msg1').value)">Copy Message</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ambulance -->
+    <div class="card-container">
+      <div class="card">
+        <div class="card-front" style="background-image:url('Ambulance.jpg');">
+          <div class="overlay"><i class="fas fa-ambulance"></i> Ambulance</div>
+        </div>
+        <div class="card-back">
+          <p><strong>Ambulance</strong></p>
+          <p>Phone: 10177 <button class="copy-btn" onclick="copyText('10177')">Copy</button></p>
+          <p>Email: ambulance@emergency.gov.za <button class="copy-btn" onclick="copyText('ambulance@emergency.gov.za')">Copy</button></p>
+          <textarea class="message-box" id="msg2">I need urgent medical assistance. Please respond.</textarea>
+          <button class="copy-btn" onclick="copyText(document.getElementById('msg2').value)">Copy Message</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Child Care -->
+    <div class="card-container">
+      <div class="card">
+        <div class="card-front" style="background-image:url('Child.jpg');">
+          <div class="overlay"><i class="fas fa-child"></i> Child Care</div>
+        </div>
+        <div class="card-back">
+          <p><strong>Child Care</strong></p>
+          <p>Phone: 112 <button class="copy-btn" onclick="copyText('112')">Copy</button></p>
+          <p>Email: childcare@helpline.org <button class="copy-btn" onclick="copyText('childcare@helpline.org')">Copy</button></p>
+          <textarea class="message-box" id="msg3">I need immediate child protection assistance. Please respond.</textarea>
+          <button class="copy-btn" onclick="copyText(document.getElementById('msg3').value)">Copy Message</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trauma Response -->
+    <div class="card-container">
+      <div class="card">
+        <div class="card-front" style="background-image:url('Trauma.jpg');">
+          <div class="overlay"><i class="fas fa-heart-crack"></i> Trauma</div>
+        </div>
+        <div class="card-back">
+          <p><strong>Trauma Response</strong></p>
+          <p>Phone: 112 <button class="copy-btn" onclick="copyText('112')">Copy</button></p>
+          <p>Email: trauma@helpline.org <button class="copy-btn" onclick="copyText('trauma@helpline.org')">Copy</button></p>
+          <textarea class="message-box" id="msg4">I need trauma assistance immediately. Please respond.</textarea>
+          <button class="copy-btn" onclick="copyText(document.getElementById('msg4').value)">Copy Message</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Development -->
+    <div class="card-container">
+      <div class="card">
+        <div class="card-front" style="background-image:url('Dsd.jpg');">
+          <div class="overlay"><i class="fas fa-dove"></i> Social Dev</div>
+        </div>
+        <div class="card-back">
+          <p><strong>Social Development</strong></p>
+          <p>Phone: 112 <button class="copy-btn" onclick="copyText('112')">Copy</button></p>
+          <p>Email: social@helpline.org <button class="copy-btn" onclick="copyText('social@helpline.org')">Copy</button></p>
+          <textarea class="message-box" id="msg5">I need social development assistance. Please respond.</textarea>
+          <button class="copy-btn" onclick="copyText(document.getElementById('msg5').value)">Copy Message</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <a href="#"><i class="fa-solid fa-brain"></i><span>Care+</span></a>
+  <a href="Analyze.html"><i class="fa-solid fa-chart-simple"></i><span>Analyze</span></a>
+  <a href="report.html"><i class="fa-solid fa-bullhorn"></i><span>Report</span></a>
+  <a href="emergency.html"><i class="fa-solid fa-triangle-exclamation"></i><span>Emergency</span></a>
+  <a href="paramed.html"><i class="fa-solid fa-robot"></i><span>Paramed AI</span></a>
+</div>
+
+<script>
+function copyText(text){
+  navigator.clipboard.writeText(text)
+    .then(()=>alert('Copied: ' + text))
+    .catch(err => console.error('Failed to copy: ', err));
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AsaLogicCare | Paramed AI</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, rgba(255,0,0,0.4), rgba(0,0,255,0.4)), #1f1f1f;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-bottom: 80px; /* space for bottom nav */
+}
+
+/* AI Logo Breathing */
+.ai-logo {
+  width: 250px;
+  height: 250px;
+  border-radius: 10%;
+  background: url('PARAMED.png') no-repeat center/cover;
+  margin: 20px auto 10px;
+  box-shadow: 0 0 20px #ff2e2e;
+  animation: breath 2s infinite alternate;
+}
+
+@keyframes breath {
+  0% { box-shadow: 0 0 20px #ff2e2e; transform: scale(1); }
+  100% { box-shadow: 0 0 60px #ff2e2e; transform: scale(1.05); }
+}
+
+.category-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 15px auto;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tab-btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: #4c8cff;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.tab-btn.active {
+  background: #2e6eff;
+}
+
+.tab-btn:hover { background: #2e6eff; }
+
+/* Make chat container flexible */
+.chat-container {
+  width: 90%;
+  max-width: 600px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 20px;
+  padding: 15px;
+  margin: 10px auto;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  min-height: 300px; /* ensures some height on small screens */
+  max-height: calc(100vh - 500px); /* prevents overflow */
+}
+
+.bubble {
+  padding: 10px 15px;
+  border-radius: 15px;
+  max-width: 80%;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+.user-bubble {
+  align-self: flex-end;
+  background: #ff2e2e;
+  color: #fff;
+}
+
+.ai-bubble {
+  align-self: flex-start;
+  background: #fff;
+  color: #000;
+}
+
+.question-buttons {
+  width: 90%;
+  max-width: 600px;
+  margin: 15px auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.question-btn {
+  background: #4c8cff;
+  color: #fff;
+  border: none;
+  border-radius: 15px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: 0.3s;
+  flex: 1 1 45%;
+  text-align: center;
+}
+
+.question-btn:hover { background: #2e6eff; }
+
+.bottom-nav {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0,0,0,0.3);
+  padding: 12px 0;
+  position: fixed;
+  bottom: 0;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.bottom-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bottom-nav a span { font-size: 12px; margin-top: 2px; }
+
+@media(max-width:600px){
+  .ai-logo { width: 200px; height: 200px; }
+  .question-btn { flex: 1 1 100%; }
+  .chat-container { max-height: calc(100vh - 400px); }
+}
+</style>
+
+</head>
+<body>
+
+<div class="ai-logo"></div>
+
+<div class="category-tabs" id="categoryTabs"></div>
+
+<div class="chat-container" id="chat"></div>
+
+<div class="question-buttons" id="questions"></div>
+
+<div class="bottom-nav">
+  <a href="care.html"><i class="fa-solid fa-brain"></i><span>Care+</span></a>
+  <a href="Analyze.html"><i class="fa-solid fa-chart-simple"></i><span>Analyze</span></a>
+  <a href="report.html"><i class="fa-solid fa-bullhorn"></i><span>Report</span></a>
+  <a href="emergency.html"><i class="fa-solid fa-triangle-exclamation"></i><span>Emergency</span></a>
+  <a href="paramed.html"><i class="fa-solid fa-robot"></i><span>Paramed AI</span></a>
+</div>
+
+<script>
+const paramedAIData = {
+  emotional: [
+    { question: "I feel sad today, can you help me?", response: "I hear you. It's okay to feel sad sometimes. Remember, even the strongest people cry. Why not watch a therapy video to lift your mood?", suggestion: "Watch Care Videos" },
+    { question: "I’m lonely and scared…", response: "Loneliness is tough. You’re not alone here. Sharing your feelings is brave. Consider submitting a report or talking to someone you trust.", suggestion: "Submit Report" },
+    { question: "I feel angry at someone close…", response: "Anger is normal. Take a deep breath. Maybe watching a care video will help you relax.", suggestion: "Watch Care Videos" },
+    { question: "I feel stressed about school/work", response: "Stress can be overwhelming. Take a short break and breathe. You can analyze your health to check how stress is affecting you.", suggestion: "Analyze Health" },
+    { question: "I need someone to talk to", response: "I’m here to listen. Sharing helps. You could try a therapy video or write a report if needed.", suggestion: "Watch Care Videos" },
+    { question: "I feel hopeless", response: "Hope is always there, even when it feels far. Start with a small step like watching a therapy video.", suggestion: "Watch Care Videos" },
+    { question: "I feel nervous about the future", response: "The future can be scary, but you are strong. Breathing exercises or a care video can help calm your mind.", suggestion: "Watch Care Videos" },
+    { question: "I miss my loved ones", response: "Missing someone is natural. Remember, sharing feelings with care videos or writing a report helps release emotions.", suggestion: "Watch Care Videos" },
+    { question: "I’m anxious about social interactions", response: "Social anxiety is common. Take small steps. Watching therapy videos can give guidance.", suggestion: "Watch Care Videos" },
+    { question: "I feel overwhelmed", response: "Feeling overwhelmed is human. Try taking a deep breath and consider analyzing your health for insight.", suggestion: "Analyze Health" }
+  ],
+  physical: [
+    { question: "I feel pain or bruises", response: "Take care of yourself. If severe, seek medical attention. You can report abuse immediately for support.", suggestion: "Submit Report" },
+    { question: "I have trouble sleeping", response: "Sleep is vital. Try relaxing exercises or watch therapy videos to improve sleep quality.", suggestion: "Watch Care Videos" },
+    { question: "I feel tired all the time", response: "Fatigue affects your wellbeing. Consider analyzing your health or watching a care video.", suggestion: "Analyze Health" },
+    { question: "I feel sick", response: "Health is important. Monitoring symptoms and watching therapy videos can help improve your wellbeing.", suggestion: "Watch Care Videos" },
+    { question: "I have headaches", response: "Headaches can be stressful. Take rest, hydrate, and check your health with the analyze feature.", suggestion: "Analyze Health" },
+    { question: "I have body pains", response: "Body pains are signals from your body. Report if needed or watch care videos for relief.", suggestion: "Submit Report" },
+    { question: "I feel weak", response: "Weakness can be due to many reasons. Consider analyzing health or watching therapy videos.", suggestion: "Analyze Health" },
+    { question: "I feel dizzy", response: "Dizziness can be alarming. Rest, drink water, and consider reporting if necessary.", suggestion: "Submit Report" },
+    { question: "I have scars I worry about", response: "Your body tells your story. You can report this to get support or watch therapy videos.", suggestion: "Submit Report" },
+    { question: "I feel hungry but can’t eat", response: "Appetite affects health. Try eating something small and watch care videos for guidance.", suggestion: "Watch Care Videos" }
+  ],
+  psychological: [
+    { question: "I’m anxious about school/work", response: "Anxiety is normal. Take deep breaths. Analyzing your health can show how stress impacts you.", suggestion: "Analyze Health" },
+    { question: "I feel I can’t handle stress", response: "Stress management is vital. Start small, watch therapy videos, and relax.", suggestion: "Watch Care Videos" },
+    { question: "I overthink everything", response: "Overthinking can be exhausting. Writing a report or watching care videos can help.", suggestion: "Submit Report" },
+    { question: "I feel insecure", response: "Insecurity is part of being human. Start with care videos to boost confidence.", suggestion: "Watch Care Videos" },
+    { question: "I have panic attacks", response: "Panic attacks can be frightening. Remember, you are safe here. Try calming techniques and watch a therapy video for guidance.", suggestion: "Watch Care Videos" },
+{ question: "I can’t focus on tasks", response: "Difficulty focusing is common under stress. Try analyzing your health and taking small breaks.", suggestion: "Analyze Health" },
+{ question: "I feel mentally exhausted", response: "Mental fatigue affects everything. Consider watching care videos or analyzing your health.", suggestion: "Watch Care Videos" },
+{ question: "I feel overwhelmed by decisions", response: "Decision fatigue is normal. Break tasks into smaller steps and try therapy videos.", suggestion: "Watch Care Videos" },
+{ question: "I have trouble remembering things", response: "Memory issues can come from stress. Relax, watch therapy videos, and review tasks slowly.", suggestion: "Watch Care Videos" },
+{ question: "I feel confused or lost", response: "Feeling lost is okay. You are taking the right steps by seeking help. Watch care videos or submit a report.", suggestion: "Watch Care Videos" }
+],
+trauma: [
+{ question: "I experienced abuse", response: "I am so sorry you went through this. Reporting is brave. You can submit a report now for support.", suggestion: "Submit Report" },
+{ question: "I have flashbacks", response: "Flashbacks are tough. Breathing and grounding exercises help. Watching therapy videos can guide you.", suggestion: "Watch Care Videos" },
+{ question: "I feel unsafe", response: "Safety is priority. Consider contacting emergency services and submitting a report.", suggestion: "Submit Report" },
+{ question: "I feel guilt or shame", response: "You are not at fault. Healing starts with support. Therapy videos or report submission can help.", suggestion: "Watch Care Videos" },
+{ question: "I have nightmares", response: "Nightmares affect rest. Relaxation and therapy videos can ease distress.", suggestion: "Watch Care Videos" },
+{ question: "I feel triggered easily", response: "Triggers are natural. Take deep breaths, watch therapy videos, and know help is available.", suggestion: "Watch Care Videos" },
+{ question: "I avoid people or places", response: "Avoidance is a coping mechanism. Start small and watch care videos for guidance.", suggestion: "Watch Care Videos" },
+{ question: "I feel numb or disconnected", response: "Feeling numb is part of trauma. Connection through therapy videos or support helps.", suggestion: "Watch Care Videos" },
+{ question: "I have panic in crowds", response: "Crowds can be overwhelming. Grounding exercises and therapy videos are recommended.", suggestion: "Watch Care Videos" },
+{ question: "I need immediate support", response: "You are taking action. Contact emergency help if needed, and watch therapy videos for guidance.", suggestion: "Emergency Contact" }
+]
+};
+
+
+
+const categories = Object.keys(paramedAIData);
+let currentCategory = 0;
+
+const chat = document.getElementById('chat');
+const questionsDiv = document.getElementById('questions');
+const categoryTabs = document.getElementById('categoryTabs');
+
+// Create category buttons
+categories.forEach((cat, index) => {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (index === 0 ? ' active' : '');
+  btn.innerText = cat.charAt(0).toUpperCase() + cat.slice(1);
+  btn.onclick = () => {
+    currentCategory = index;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    loadQuestions();
+  };
+  categoryTabs.appendChild(btn);
+});
+
+function loadQuestions() {
+  questionsDiv.innerHTML = '';
+  const category = categories[currentCategory];
+  paramedAIData[category].forEach(item => {
+    const btn = document.createElement('button');
+    btn.className = 'question-btn';
+    btn.innerText = item.question;
+    btn.onclick = () => handleQuestion(item);
+    questionsDiv.appendChild(btn);
+  });
+}
+
+function handleQuestion(item) {
+  // User bubble
+  const userBubble = document.createElement('div');
+  userBubble.className = 'bubble user-bubble';
+  userBubble.innerText = item.question;
+  chat.appendChild(userBubble);
+  chat.scrollTop = chat.scrollHeight;
+
+  // AI bubble with delay
+  setTimeout(() => {
+    const aiBubble = document.createElement('div');
+    aiBubble.className = 'bubble ai-bubble';
+    aiBubble.innerHTML = `${item.response}<br><em>Suggested action: ${item.suggestion}</em>`;
+    chat.appendChild(aiBubble);
+    chat.scrollTop = chat.scrollHeight;
+  }, 700);
+}
+
+// Load first category by default
+loadQuestions();
+</script>
+</body>
+</html>

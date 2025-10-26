@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AsaLogicCare Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, rgba(255, 0, 0, 0.4), rgba(0, 0, 255, 0.4)), #1f1f1f;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Banner */
+    .banner {
+      width: 100%;
+      height: 50vh;
+      background: url('Banner.png') center/cover no-repeat;
+      position: relative;
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+    }
+
+    /* Card container for vertical slide */
+    .card-container {
+      flex:1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+      height: 200px; /* fixed height for vertical slide */
+      margin-top: -40px;
+    }
+
+    .card {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 25px 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      max-width: 300px;
+      text-align: center;
+      width: 100%;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    .card.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card i {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #ff2e2e;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .card p {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: #ddd;
+    }
+
+    /* Bottom nav */
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 0;
+      background: rgba(0,0,0,0.6);
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .bottom-nav a {
+      color: #ddd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .bottom-nav a i {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+      color: #ff2e2e;
+    }
+
+    .bottom-nav a.active {
+      color: #fff;
+    }
+
+    @media screen and (max-width: 600px) {
+      .card { padding: 20px; max-width: 250px; }
+      .card i { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner -->
+  <div class="banner"></div>
+
+  <!-- Dynamic Card -->
+  <div class="card-container" id="cardContainer">
+    <!-- Cards will be generated here -->
+  </div>
+
+  <!-- Bottom Nav with links -->
+  <div class="bottom-nav">
+    <a href="care.html" class="active" data-index="0"><i class="fa-solid fa-brain"></i> Care+</a>
+    <a href="analyze.html" data-index="1"><i class="fa-solid fa-chart-column"></i> Analyze</a>
+    <a href="report.html" data-index="2"><i class="fa-solid fa-bullhorn"></i> Report</a>
+    <a href="emergency.html" data-index="3"><i class="fa-solid fa-triangle-exclamation"></i> Emergency</a>
+    <a href="paramed.html" data-index="4"><i class="fa-solid fa-robot"></i> Paramed AI</a>
+  </div>
+
+  <!-- Script -->
+  <script>
+    const cardsData = [
+      {icon:'fa-brain', title:'🧠 Care+', text:'We care for you Gender'},
+      {icon:'fa-chart-column', title:'📊 Analyze', text:'We analyze report to make sure you protected'},
+      {icon:'fa-bullhorn', title:'📢 Report', text:'Help say No so silence'},
+      {icon:'fa-triangle-exclamation', title:'🚨 Emergency', text:'Emergency contact easy for pro health'},
+      {icon:'fa-robot', title:'🤖 Paramed AI', text:'AI therapy to help'}
+    ];
+
+    const cardContainer = document.getElementById('cardContainer');
+
+    // Generate card elements
+    cardsData.forEach((c, idx) => {
+      const card = document.createElement('div');
+      card.classList.add('card');
+      if(idx === 0) card.classList.add('active');
+      card.innerHTML = `<i class="fa-solid ${c.icon}"></i>
+                        <h2>${c.title}</h2>
+                        <p>${c.text}</p>`;
+      cardContainer.appendChild(card);
+    });
+
+    const cards = document.querySelectorAll('.card');
+    const navLinks = document.querySelectorAll('.bottom-nav a');
+    let currentIndex = 0;
+
+    function showCard(index) {
+      cards.forEach((c, i) => {
+        c.classList.remove('active');
+        if(i === index) c.classList.add('active');
+      });
+      navLinks.forEach(link => link.classList.remove('active'));
+      navLinks[index].classList.add('active');
+    }
+
+    // Auto slide every 3s
+    setInterval(() => {
+      currentIndex = (currentIndex + 1) % cards.length;
+      showCard(currentIndex);
+    }, 3000);
+
+    // Click bottom nav
+    navLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        currentIndex = parseInt(link.dataset.index);
+        showCard(currentIndex);
+      });
+    });
+  </script>
+
+</body>
+</html>
